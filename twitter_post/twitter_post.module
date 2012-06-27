@@ -43,12 +43,12 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
       return;
     }
     $form['twitter'] = array(
-      '#type' => 'fieldset',
-      '#description' => t('Users with proper permissions will be given the option to post announcements to their Twitter accounts when they create new content. Editing the following fields will override the !twitter_admin.', array('!twitter_admin' => l('site defaults', 'admin/settings/twitter'))),
-      '#title' => 'Twitter settings',
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-      );
+        '#type' => 'fieldset',
+        '#description' => t('Users with proper permissions will be given the option to post announcements to their Twitter accounts when they create new content. Editing the following fields will override the !twitter_admin.', array('!twitter_admin' => l('site defaults', 'admin/settings/twitter'))),
+        '#title' => 'Twitter settings',
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+    );
 
     $form['twitter']['twitter_post_default_state'] = array(
       '#type' => 'radios',
@@ -90,14 +90,15 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
     if (!$twitter_form) {
       return;
     }
-    $form['twitter'] = array(
+    
+  /*  $form['twitter'] = array(
       '#type' => 'fieldset',
       '#title' => t('Post to twitter.com'),
       '#group' => 'additional_settings',
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
       '#tree' => TRUE,
-    );
+    );*/
 
 
     $type_default = variable_get('twitter_post_default_state_' . $type, 'default');
@@ -129,7 +130,7 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
 
     $default_format = variable_get('twitter_post_default_format_' . $type, FALSE);
     $default_format = !empty($default_format) ? $default_format 
-      : variable_get('twitter_post_default_format', 'New post: !title !tinyurl');
+      : variable_get('twitter_post_default_format', 'New post: '); //!title !tinyurl
 
     $form['twitter']['status']['#default_value'] = $default_format;
     $form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.  If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is 100 characters.');
@@ -162,12 +163,13 @@ function twitter_post_content_extra_fields($type) {
  * Intercepts newly published nodes and posts noticed to Twitter.
  */
 function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  //Inserting default extension of the status
-  $node->twitter['status'] = $node->twitter['status']." !tinyurl #demografie";
   switch ($op) {
     case 'insert':
     case 'update':
       if (!empty($node->status) && !empty($node->twitter) && !empty($node->twitter['post'])) {
+        //Inserting default extension of the status
+        $node->twitter['status'] = $node->twitter['status']." !tinyurl #demografie";
+        
         module_load_include('inc', 'twitter');
 
         $twitter_account = twitter_account_load($node->twitter['account']);
