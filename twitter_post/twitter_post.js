@@ -10,7 +10,7 @@ Drupal.behaviors.twitter_post = function (context) {
        titleOffset = $("#edit-title").val().length; 
        var charsLeft = (120 - titleOffset - $("#twitter-textfield").val().length +6);
        var descDiv = $("#twitter-textfield").next();
-       $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
+       $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining. Remove !title in twitter field for more characters");
        if (charsLeft < 0) {
          $("#edit-title").val($("#edit-title").val().substring(0, 120 - $("#twitter-textfield").val().length + 5));
        }
@@ -24,6 +24,7 @@ Drupal.behaviors.twitter_post = function (context) {
     if (charsLeft < 0) {
       if($("#twitter-textfield").val().indexOf("!title") != -1) {
         $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120 - $("#edit-title").val().length + 6));
+        $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining. Remove !title in twitter field for more characters");
       }else{
         $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120));
       }

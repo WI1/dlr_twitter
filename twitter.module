@@ -145,6 +145,10 @@ function twitter_cron() {
   if ($age = variable_get('twitter_expire', 0)) {
     db_query('DELETE FROM {twitter} WHERE created_time < %d', time() - $age);
   }
+  
+    // Nuke recent statuses as well so that deleted tweets are removed time set to 7 days.
+  db_query('DELETE FROM {twitter} WHERE created_time > %d', time() - 604800);
+  
 }
 
 
