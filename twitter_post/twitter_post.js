@@ -18,6 +18,12 @@ Drupal.behaviors.twitter_post = function (context) {
    });
 
    $("#twitter-textfield", context).keyup(function() {
+    if($("#twitter-textfield").val().indexOf("!title") != -1) {
+       titleOffset = $("#edit-title").val().length; 
+    }else{
+       titleOffset = 0;
+    }
+
     var charsLeft = (120 - $(this).val().length - titleOffset + 6);
     var descDiv = $(this).next();
     $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
