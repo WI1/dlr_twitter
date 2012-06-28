@@ -135,6 +135,9 @@ function twitter_cron() {
 
   $sql  = "SELECT twitter_uid FROM {twitter_account} WHERE import = 1 ORDER BY last_refresh ASC";
 
+    // Nuke recent statuses so that deleted tweets are removed time- set to 7 days.
+  db_query('DELETE FROM {twitter} WHERE created_time > %d', time() - 604800);
+  
   $results = db_query_range($sql, 0, 20);
   while ($account = db_fetch_object($results)) {
   //  twitter_fetch_user_timeline($account->twitter_uid);
@@ -146,8 +149,7 @@ function twitter_cron() {
     db_query('DELETE FROM {twitter} WHERE created_time < %d', time() - $age);
   }
   
-    // Nuke recent statuses as well so that deleted tweets are removed time set to 7 days.
-  db_query('DELETE FROM {twitter} WHERE created_time > %d', time() - 604800);
+  
   
 }
 
