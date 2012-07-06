@@ -91,14 +91,15 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
       return;
     }
     
-  /*  $form['twitter'] = array(
+    $form['twitter'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Post to twitter.com'),
+      '#title' => t(''),
       '#group' => 'additional_settings',
-      '#collapsible' => TRUE,
+      '#collapsible' => FALSE,
       '#collapsed' => FALSE,
       '#tree' => TRUE,
-    );*/
+        
+    );
 
 
     $type_default = variable_get('twitter_post_default_state_' . $type, 'default');
