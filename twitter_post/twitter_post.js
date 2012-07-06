@@ -5,7 +5,7 @@
 Drupal.behaviors.twitter_post = function (context) {
    var titleOffset = 0;
 
-   $("#edit-title", context).keyup(function() {
+/*   $("#edit-title", context).keyup(function() {
      if($("#twitter-textfield").val().indexOf("!title") != -1) {
        titleOffset = $("#edit-title").val().length; 
        var charsLeft = (120 - titleOffset - $("#twitter-textfield").val().length +6);
@@ -15,7 +15,7 @@ Drupal.behaviors.twitter_post = function (context) {
          $("#edit-title").val($("#edit-title").val().substring(0, 120 - $("#twitter-textfield").val().length + 5));
        }
      }
-   });
+   });*/
 
    $("#twitter-textfield", context).keyup(function() {
     if($("#twitter-textfield").val().indexOf("!title") != -1) {
@@ -27,7 +27,7 @@ Drupal.behaviors.twitter_post = function (context) {
     var charsLeft = (120 - $(this).val().length - titleOffset + 6);
     var descDiv = $(this).next();
     $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
-    if (charsLeft < 0) {
+    if (charsLeft <= 0) {
       if($("#twitter-textfield").val().indexOf("!title") != -1) {
         $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120 - $("#edit-title").val().length + 6));
         $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining. Remove !title in twitter field for more characters");
