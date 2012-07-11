@@ -19,18 +19,18 @@ Drupal.behaviors.twitter_post = function (context) {
 
    $("#twitter-textfield", context).keyup(function() {
     if($("#twitter-textfield").val().indexOf("!title") != -1) {
-       titleOffset = $("#edit-title").val().length; 
+       titleOffset = $("#edit-title").val().length - 6; 
     }else{
        titleOffset = 0;
     }
 
-    var charsLeft = (120 - $(this).val().length - titleOffset + 6);
+    var charsLeft = (120 - $(this).val().length - titleOffset);
     var descDiv = $(this).next();
     $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
-    if (charsLeft <= 0) {
+    if (charsLeft <= 0 || $(this).val().length == 120) {
       if($("#twitter-textfield").val().indexOf("!title") != -1) {
-        $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120 - $("#edit-title").val().length + 6));
-        $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining. Remove !title in twitter field for more characters");
+        $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120 - titleOffset));
+        $(descDiv).html("<strong>" + charsLeft + "</strong> additional characters possible. Remove !title in twitter field for more characters");
       }else{
         $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, 120));
       }
