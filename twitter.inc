@@ -129,6 +129,8 @@ function twitter_fetch_home_timeline($id) {
     $params['include_rts'] = true;
   }
 
+  $params['count'] = 200;
+  
   $statuses = $twitter->home_timeline($account->id, $params);
   foreach ($statuses as $status) {
     twitter_status_save($status);
