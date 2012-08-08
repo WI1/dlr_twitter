@@ -98,6 +98,8 @@ function twitter_fetch_user_timeline($id) {
   if ($account->include_retweets) {
     $params['include_rts'] = true;
   }
+  
+  $params['count'] = 200;
 
   $statuses = $twitter->user_timeline($account->id, $params, $account->protected);
   foreach ($statuses as $status) {
