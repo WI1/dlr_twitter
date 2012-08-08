@@ -140,8 +140,8 @@ function twitter_cron() {
   
   $results = db_query_range($sql, 0, 20);
   while ($account = db_fetch_object($results)) {
-      twitter_fetch_user_timeline($account->twitter_uid);
       twitter_fetch_home_timeline($account->twitter_uid);
+      twitter_fetch_user_timeline($account->twitter_uid);
       //second fetch overwrites first
   }
 

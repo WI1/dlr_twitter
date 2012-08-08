@@ -92,7 +92,7 @@ function twitter_fetch_user_timeline($id) {
 
   $params = array();
   if ($since) {
-    $params['since_id'] = $since;
+  //  $params['since_id'] = $since;
   }
   
   if ($account->include_retweets) {
