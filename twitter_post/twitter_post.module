@@ -140,7 +140,7 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
     //$form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.  If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is 100 characters.');
     $form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com appended with a tinyurl and #demografie. If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is '.($max_length_twitter).' characters.');
     $form['twitter']['status']['#maxlength'] = $max_length;
-
+    $form['title']['#description'] = t('Enter title here');
     twitter_include_token_fields($form);
   }
 }
