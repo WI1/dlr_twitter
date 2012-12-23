@@ -4,7 +4,7 @@
  */
 Drupal.behaviors.twitter_post = function (context) {
    var titleOffset = 0;
-   var max_length = 105;
+   var max_length = 100;
    var descDiv = $("#twitter-textfield").next();
    var titleDescDiv = $("#edit-title").next();
 

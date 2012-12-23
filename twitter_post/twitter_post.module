@@ -34,8 +34,8 @@ function twitter_post_perm() {
  * Implementation of hook_form_alter().
  */
 function twitter_post_form_alter(&$form, $form_state, $form_id) {
-  $max_length = 105 + 7; //initialized max length
-  $max_length_twitter = 105;
+  $max_length = 100 + 7; //initialized max length
+  $max_length_twitter = 100;
   
   $allowed_types = variable_get('twitter_post_types', array('story' => 'story', 'blog' => 'blog'));
 
@@ -168,7 +168,7 @@ function twitter_post_content_extra_fields($type) {
  * Intercepts newly published nodes and posts noticed to Twitter.
  */
 function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
-  $max_length_twitter = 105;
+  $max_length_twitter = 100;
   switch ($op) {
     case 'insert':
     case 'update':
