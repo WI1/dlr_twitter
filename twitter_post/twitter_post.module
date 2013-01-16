@@ -173,7 +173,8 @@ function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
     case 'insert':
     case 'update':
       if (!empty($node->status) && !empty($node->twitter) && !empty($node->twitter['post'])) {
-        //Inserting default extension of the status
+        //The status needs to be truncated after replacement of !title. Inserting default extension of the status
+        $node->twitter['status'] = strtr($node->twitter['status'], array('!title' => $node->title));
         $node->twitter['status'] = substr($node->twitter['status'], 0, $max_length_twitter)." !tinyurl #demografie";
         
         module_load_include('inc', 'twitter');
