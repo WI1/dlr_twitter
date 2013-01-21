@@ -10,19 +10,26 @@ Drupal.behaviors.twitter_post = function (context) {
 
    $("#edit-title", context).keyup(function() {
      if($("#twitter-textfield").val().indexOf("!title") != -1 && $("#twitter-toggle").attr('checked')) {
+       
        titleOffset = $("#edit-title").val().length - 6; /* length of !title*/
        var realLength = $("#twitter-textfield").val().length + titleOffset;
        var charsLeft = (max_length - realLength);
        
-       $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
-       $(titleDescDiv).html("Enter title here"); 
+       $(descDiv).html("Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen" 
+          + " TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur " + max_length + " Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette "
+          + "'!title' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
+          + "wird ausschließlich der Inhalt aus dem Feld 'Titelzeile' als Nachricht für Twitter.com verwendet. <br><br> Noch <strong>" + charsLeft + "</strong> weitere Zeichen können zu Twitter übertragen werden");
+
+       $(titleDescDiv).html("Tragen Sie hier den Titel des Beitrags ein. Noch " + charsLeft +" weitere Zeichen können zu Twitter übertragen werden"); 
+
        if (charsLeft < 0) {
         /*$("#twitter-textfield").val($("#twitter-textfield").val().substring(0, max_length - titleOffset));*/
-        $(descDiv).html("<strong>" + 0 + "</strong> characters remaining. Twitter text field will be truncated");
-        $(titleDescDiv).html("Twitter text field will be truncated");
+        $(descDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + charsLeft +" </strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
+        $(titleDescDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +"</strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
         $(titleDescDiv).css("color","#FF0000");
         $(titleDescDiv).css("display","block"); 
         $(descDiv).css("color","#FF0000");   
+        $(descDiv).css("display","block");
        } else {
          $(descDiv).removeAttr("style");
          $(titleDescDiv).removeAttr("style");
@@ -38,13 +45,20 @@ Drupal.behaviors.twitter_post = function (context) {
     var realLength = $(this).val().length + titleOffset;
     var charsLeft = (max_length - realLength);
 
-    $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
+    $(descDiv).html("Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen" 
+      + " TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur " + max_length + " Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette "
+      + "'!title' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
+      + "wird ausschließlich der Inhalt aus dem Feld 'Titelzeile' als Nachricht für Twitter.com verwendet. <br><br> Noch <strong>" + charsLeft + "</strong> weitere Zeichen können zu Twitter übertragen werden");
 
     if (charsLeft < 0) {
       /* $("#twitter-textfield").val($("#twitter-textfield").val().substring(0, max_length - titleOffset));*/
-      $(descDiv).html("<strong>" + 0 + "</strong> characters remaining. Twitter text field will be truncated");
+      $(descDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +" </strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
+      $(titleDescDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +"</strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");      
+
       $(descDiv).css("color","#FF0000");
       $(descDiv).css("display","block");
+      $(titleDescDiv).css("color","#FF0000");
+      $(titleDescDiv).css("display","block");
     } else {
       $(descDiv).removeClass("negative");
       $(descDiv).removeAttr("style");
@@ -67,9 +81,14 @@ Drupal.behaviors.twitter_post = function (context) {
       var charsLeft = (max_length - realLength);
       $(descDiv).html("<strong>" + charsLeft + "</strong> characters remaining");
       if (charsLeft < 0) {
-        $(descDiv).html("<strong>" + 0 + "</strong> characters remaining. Twitter text field will be truncated");
+        $(descDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +" </strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
+        $(titleDescDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +"</strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");        
+
         $(descDiv).css("color","#FF0000");
         $(descDiv).css("display","block");
+        $(titleDescDiv).css("color","#FF0000");
+        $(titleDescDiv).css("display","block");
+        
         } else {
         $(descDiv).removeClass("negative");
         $(descDiv).removeAttr("style");

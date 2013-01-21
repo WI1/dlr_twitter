@@ -34,7 +34,7 @@ function twitter_post_perm() {
  * Implementation of hook_form_alter().
  */
 function twitter_post_form_alter(&$form, $form_state, $form_id) {
-  $max_length = 100 + 7; //initialized max length
+  $max_field_length = 256; //initialized max length
   $max_length_twitter = 100;
   
   $allowed_types = variable_get('twitter_post_types', array('story' => 'story', 'blog' => 'blog'));
@@ -56,7 +56,7 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
     $form['twitter']['twitter_post_default_state'] = array(
       '#type' => 'radios',
       '#title' => t('Default post announcements'),
-      '#maxlength' => $max_length,
+      '#maxlength' => $max_field_length,
       '#options' => array(
         'default' => t('Use site default'),
         FALSE => t('Disabled by default'),
@@ -70,7 +70,7 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
     $form['twitter']['twitter_post_default_format'] = array(
       '#type' => 'textfield',
       '#title' => t('Default format string'),
-      '#maxlength' => $max_length,
+      '#maxlength' => $max_field_length,
       '#description' => t('The given text will be posted to twitter.com. You can use !url, !url-alias, !shorturl, !title and !author-name as placeholders. Leave blank to use the site default.'),
       '#default_value' => variable_get('twitter_post_default_format_' . $type, ''),
     );
@@ -138,8 +138,11 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
 
     $form['twitter']['status']['#default_value'] = $default_format;
     //$form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.  If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is 100 characters.');
-    $form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com appended with a tinyurl and #demografie. If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is '.($max_length_twitter).' characters.');
-    $form['twitter']['status']['#maxlength'] = $max_length;
+    $form['twitter']['status']['#description'] = t('Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen' 
+          .'TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur '. $max_length_twitter.' Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette'
+          .'\'!title\' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes \'Titelzeile\' ersetze. Wenn Sie dieses Eingabefeld leer lassen, '
+          .'wird ausschließlich der Inhalt aus dem Feld \'Titelzeile\' als Nachricht für Twitter.com verwendet. <BR><BR> Noch <strong>' . $max_length_twitter . '</strong> weitere Zeichen können zu Twitter übertragen werden');
+    $form['twitter']['status']['#maxlength'] = $max_field_length;
     $form['title']['#description'] = t('Enter title here');
     twitter_include_token_fields($form);
   }
