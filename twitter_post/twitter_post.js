@@ -24,7 +24,7 @@ Drupal.behaviors.twitter_post = function (context) {
 
        if (charsLeft < 0) {
         /*$("#twitter-textfield").val($("#twitter-textfield").val().substring(0, max_length - titleOffset));*/
-        $(descDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + charsLeft +" </strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
+        $(descDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +" </strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
         $(titleDescDiv).html("Die Maximallänge für Twitter-Nachrichten wurde überschritten. Entfernen Sie mindestens <strong>" + -1*charsLeft +"</strong> Zeichen, ansonsten werden diese automatisch vom Ende abgeschnitten.");
         $(titleDescDiv).css("color","#FF0000");
         $(titleDescDiv).css("display","block"); 
