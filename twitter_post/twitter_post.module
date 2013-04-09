@@ -134,13 +134,13 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
 
     $default_format = variable_get('twitter_post_default_format_' . $type, FALSE);
     $default_format = !empty($default_format) ? $default_format 
-      : variable_get('twitter_post_default_format', 'New post: '); //!title !tinyurl
+      : variable_get('twitter_post_default_format', 'New post: '); //!titel !tinyurl
 
     $form['twitter']['status']['#default_value'] = $default_format;
     //$form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.  If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is 100 characters.');
     $form['twitter']['status']['#description'] = t('Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen' 
-          .'TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur '. $max_length_twitter.' Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette'
-          .'\'!title\' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes \'Titelzeile\' ersetze. Wenn Sie dieses Eingabefeld leer lassen, '
+          .'TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur '. $max_length_twitter.' Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette '
+          .'\'!titel\' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes \'Titelzeile\' ersetze. Wenn Sie dieses Eingabefeld leer lassen, '
           .'wird ausschließlich der Inhalt aus dem Feld \'Titelzeile\' als Nachricht für Twitter.com verwendet. <BR><BR> Noch <strong>' . $max_length_twitter . '</strong> weitere Zeichen können zu Twitter übertragen werden');
     $form['twitter']['status']['#maxlength'] = $max_field_length;
     $form['title']['#description'] = t('Enter title here');
@@ -177,7 +177,7 @@ function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
     case 'update':
       if (!empty($node->status) && !empty($node->twitter) && !empty($node->twitter['post'])) {
         //The status needs to be truncated after replacement of !title. Inserting default extension of the status
-        $node->twitter['status'] = strtr($node->twitter['status'], array('!title' => $node->title));
+        $node->twitter['status'] = str_ireplace('!titel', $node->title, $node->twitter['status']);
         $node->twitter['status'] = substr($node->twitter['status'], 0, $max_length_twitter)." !tinyurl #demografie";
         
         module_load_include('inc', 'twitter');

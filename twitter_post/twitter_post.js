@@ -9,15 +9,15 @@ Drupal.behaviors.twitter_post = function (context) {
    var titleDescDiv = $("#edit-title").next();
 
    $("#edit-title", context).keyup(function() {
-     if($("#twitter-textfield").val().indexOf("!title") != -1 && $("#twitter-toggle").attr('checked')) {
+     if($("#twitter-textfield").val().toLowerCase().indexOf("!titel") != -1 && $("#twitter-toggle").attr('checked')) {
        
-       titleOffset = $("#edit-title").val().length - 6; /* length of !title*/
+       titleOffset = $("#edit-title").val().length - 6; /* length of !titel*/
        var realLength = $("#twitter-textfield").val().length + titleOffset;
        var charsLeft = (max_length - realLength);
        
        $(descDiv).html("Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen" 
           + " TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur " + max_length + " Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette "
-          + "'!title' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
+          + "'!titel' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
           + "wird ausschließlich der Inhalt aus dem Feld 'Titelzeile' als Nachricht für Twitter.com verwendet. <br><br> Noch <strong>" + charsLeft + "</strong> weitere Zeichen können zu Twitter übertragen werden");
 
        $(titleDescDiv).html("Tragen Sie hier den Titel des Beitrags ein. Noch " + charsLeft +" weitere Zeichen können zu Twitter übertragen werden"); 
@@ -39,15 +39,15 @@ Drupal.behaviors.twitter_post = function (context) {
 
    $("#twitter-textfield", context).keyup(function() {
     titleOffset = 0;
-    if($("#twitter-textfield").val().indexOf("!title") != -1) {
-       titleOffset = $("#edit-title").val().length - 6; /* length of !title*/
+    if($("#twitter-textfield").val().toLowerCase().indexOf("!titel") != -1) {
+       titleOffset = $("#edit-title").val().length - 6; /* length of !titel*/
     }
     var realLength = $(this).val().length + titleOffset;
     var charsLeft = (max_length - realLength);
 
     $(descDiv).html("Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen" 
       + " TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur " + max_length + " Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette "
-      + "'!title' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
+      + "'!titel' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes 'Titelzeile' ersetze. Wenn Sie dieses Eingabefeld leer lassen, "
       + "wird ausschließlich der Inhalt aus dem Feld 'Titelzeile' als Nachricht für Twitter.com verwendet. <br><br> Noch <strong>" + charsLeft + "</strong> weitere Zeichen können zu Twitter übertragen werden");
 
     if (charsLeft < 0) {
@@ -74,8 +74,8 @@ Drupal.behaviors.twitter_post = function (context) {
     if ($("#twitter-toggle").attr("checked")) {
       $("#twitter-textfield-wrapper").show();
       
-      if($("#twitter-textfield").val().indexOf("!title") != -1) {
-         titleOffset = $("#edit-title").val().length - 6; /* length of !title*/
+      if($("#twitter-textfield").val().toLowerCase().indexOf("!titel") != -1) {
+         titleOffset = $("#edit-title").val().length - 6; /* length of !titel*/
       }
       var realLength = $("#twitter-textfield").val().length + titleOffset;
       var charsLeft = (max_length - realLength);
