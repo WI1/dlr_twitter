@@ -162,3 +162,10 @@ function twitter_user_delete($twitter_uid) {
   db_query($sql, $twitter_uid);
 }
 
+/**
+ * Deletes a TwitterStatus
+ */
+function twitter_status_delete($status_id) {
+  $sql = "DELETE FROM {twitter} WHERE twitter_id = %s";
+  db_query($sql, $status_id);
+}

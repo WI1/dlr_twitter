@@ -57,6 +57,17 @@ function twitter_menu() {
     'type' => MENU_CALLBACK,
   );
   
+  // Custom code added to delete tweets by status ID
+  $items['twitter/delete'] = array(
+    'title' => 'Delete Tweets',
+    'access callback' => 'twitter_edit_access',
+    'page callback' => 'twitter_status_delete',
+    'page arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'file' => 'twitter.inc',
+  );
+  
+  
   return $items;
 }
 
@@ -135,8 +146,8 @@ function twitter_cron() {
 
   $sql  = "SELECT twitter_uid FROM {twitter_account} WHERE import = 1 ORDER BY last_refresh ASC";
 
-    // Nuke recent statuses so that deleted tweets are removed time- set to 7 days.
-  db_query('DELETE FROM {twitter} WHERE created_time > %d', time() - 604800);
+    // Nuke recent statuses so that deleted tweets are removed time- set to 1 days.
+  db_query('DELETE FROM {twitter} WHERE created_time > %d', time() - 86400);
   
   $results = db_query_range($sql, 0, 20);
   while ($account = db_fetch_object($results)) {
