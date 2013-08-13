@@ -2,19 +2,19 @@
 
 /**
  * @file
- * Functional tests for the twitter Module.
+ * Functional tests for the twitter module without OAuth.
  */
 
 class TwitterTest extends DrupalWebTestCase {
-  /*'
+  /*
    * The getInfo() method provides information about the test.
    * In order for the test to be run, the getInfo() method needs
    * to be implemented.
    */
   public static function getInfo() {
     return array(
-      'name' => t('Twitter tests'),
-      'description' => t('Tests main module functionality.'),
+      'name' => t('Main'),
+      'description' => t('Tests main module features such as adding accounts or loading tweets.'),
       'group' => t('Twitter'),
     );
   }
@@ -23,11 +23,11 @@ class TwitterTest extends DrupalWebTestCase {
    * Prepares the testing environment
    */
   function setUp() {
-    parent::setUp('twitter', 'views');
+    parent::setUp('autoload', 'libraries', 'twitter', 'views', 'twitter_mock');
   }
 
   /**
-   * Tests account addition without Oauth module activated
+   * Tests account addition process
    */
   public function testAccountAdditionNoOauth() {
     // Create user

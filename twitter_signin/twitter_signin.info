@@ -1,13 +1,11 @@
-name = Twitter Signin 
+name = Twitter Signin
 description = Adds support for "Sign in with Twitter"
-php = 5.1
 core = 6.x
 dependencies[] = twitter
-dependencies[] = oauth_common
 
-; Information added by drupal.org packaging script on 2011-12-04
-version = "6.x-3.0-beta9"
+; Information added by drupal.org packaging script on 2013-04-19
+version = "6.x-5.1"
 core = "6.x"
 project = "twitter"
-datestamp = "1322959367"
+datestamp = "1366377444"
 

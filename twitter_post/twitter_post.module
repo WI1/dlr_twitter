@@ -1,14 +1,15 @@
 <?php
-
 /**
  * @file
- * Main hooks for twitter post module
+ * Hook implementations for twitter_post module.
  */
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function twitter_post_menu() {
+  $items = array();
+
   $items['admin/settings/twitter/post'] = array(
     'title' => 'Post',
     'page callback' => 'drupal_get_form',
@@ -16,128 +17,60 @@ function twitter_post_menu() {
     'access arguments' => array('administer site configuration'),
     'file' => 'twitter_post.pages.inc',
     'type' => MENU_LOCAL_TASK,
-    'weight' => 3
-    
+    'weight' => 3,
   );
 
   return $items;
 }
 
 /**
- * Implementation of hook_perm()
+ * Implements hook_perm().
  */
 function twitter_post_perm() {
   return array('post to twitter');
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implements hook_form_alter().
  */
 function twitter_post_form_alter(&$form, $form_state, $form_id) {
   $max_field_length = 256; //initialized max length
   $max_length_twitter = 100;
   
-  $allowed_types = variable_get('twitter_post_types', array('story' => 'story', 'blog' => 'blog'));
-
-  // Add per-content type settings to node type forms
-  if ($form_id == 'node_type_form') {
-    $type = $form['#node_type']->type;
-    if (empty($allowed_types[$type])) {
-      return;
-    }
-    $form['twitter'] = array(
-        '#type' => 'fieldset',
-        '#description' => t('Users with proper permissions will be given the option to post announcements to their Twitter accounts when they create new content. Editing the following fields will override the !twitter_admin.', array('!twitter_admin' => l('site defaults', 'admin/settings/twitter'))),
-        '#title' => 'Twitter settings',
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-    );
-
-    $form['twitter']['twitter_post_default_state'] = array(
-      '#type' => 'radios',
-      '#title' => t('Default post announcements'),
-      '#maxlength' => $max_field_length,
-      '#options' => array(
-        'default' => t('Use site default'),
-        FALSE => t('Disabled by default'),
-        'all' => t('Enabled by default'),
-        'create' => t('Enabled by default on create only'),
-        'update' => t('Enabled by default on update only'),
-        ),
-      '#default_value' => variable_get('twitter_post_default_state_' . $type, 'default'),
-    );
-
-    $form['twitter']['twitter_post_default_format'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Default format string'),
-      '#maxlength' => $max_field_length,
-      '#description' => t('The given text will be posted to twitter.com. You can use !url, !url-alias, !shorturl, !title and !author-name as placeholders. Leave blank to use the site default.'),
-      '#default_value' => variable_get('twitter_post_default_format_' . $type, ''),
-    );
-
-    twitter_include_token_fields($form);
-  }
-
-  // Alter any node forms.
-  if (isset($form['#node']) && $form['#node']->type .'_node_form' == $form_id) {
-    // If we haven't enabled Twitter posting on this node type, nothing to do
-    // here.
+  // If we haven't enabled Twitter posting on this node type, nothing to do here.
+  $allowed_types = variable_get('twitter_post_types', array());
+  if (isset($form['#node']) && $form['#node']->type . '_node_form' == $form_id) {
     $type = $form['#node']->type;
+    $allowed_types = variable_get('twitter_post_types', array());
     if (empty($allowed_types[$type])) {
       return;
     }
 
     module_load_include('inc', 'twitter');
-
     $twitter_form = twitter_post_form();
     if (!$twitter_form) {
       return;
     }
-    
     $form['twitter'] = array(
       '#type' => 'fieldset',
-      '#title' => t(''),
       '#group' => 'additional_settings',
+      //'#title' => t('Post to Twitter.com'),
+      '#title' => t(''),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
       '#tree' => TRUE,
         
     );
-
-
-    $type_default = variable_get('twitter_post_default_state_' . $type, 'default');
-    $type_default = $type_default != 'default' ? $type_default
-      : variable_get('twitter_post_default_state', FALSE);
-    switch ($type_default) {
-      case 'all':
-        $post_default = TRUE;
-        break;
-      case 'create':
-        $post_default = empty($form['nid']['#value']);
-        break;
-      case 'update':
-        $post_default = !empty($form['nid']['#value']);
-        break;
-      case FALSE:
-      default:
-        $post_default = FALSE;
-        break;
-    }
-
     $form['twitter']['post'] = array(
       '#type' => 'checkbox',
       '#title' => t('Announce this post on Twitter'),
-      '#default_value' => $post_default,
+      '#default_value' => variable_get('twitter_post_default_value', 0),
       '#id' => 'twitter-toggle',
     );
     $form['twitter'] += $twitter_form;
-
-    $default_format = variable_get('twitter_post_default_format_' . $type, FALSE);
-    $default_format = !empty($default_format) ? $default_format 
-      : variable_get('twitter_post_default_format', 'New post: '); //!titel !tinyurl
-
-    $form['twitter']['status']['#default_value'] = $default_format;
-    //$form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.  If the token module is enabled, you may also choose from the tokens listed in the replacement patterns section. Maxlength is 100 characters.');
+    $form['twitter']['status']['#default_value'] = variable_get('twitter_post_default_format', 'New post: !title !url-alias');
+   // $form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text.');
+   // $form['twitter']['status']['#maxlength'] = 150;
     $form['twitter']['status']['#description'] = t('Der hier eingegebene Text wird auf Twitter.com im Kanal @DemoScreen veröffentlicht, nachdem er zuvor durch den Hashtag #demografie sowie einen' 
           .'TinyURL-Link zu diesem Beitrag erweitert wurde. Daher stehen Ihnen für den eigenen Text nur '. $max_length_twitter.' Zeichen zur Verfügung. Fügen Sie in diesem Feld die Zeichenkette '
           .'\'!titel\' ein, so wird diese vor der Übertragung zu Twitter durch den Inhalt des Eingabefeldes \'Titelzeile\' ersetze. Wenn Sie dieses Eingabefeld leer lassen, '
@@ -150,6 +83,8 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
 
 /**
  * Implementation of hook_content_extra_fields().
+ *
+ * Let's the Twitter field be positioned within the edit node form.
  */
 function twitter_post_content_extra_fields($type) {
   $allowed_types = variable_get('twitter_types', array('story' => 'story', 'blog' => 'blog'));
@@ -170,7 +105,7 @@ function twitter_post_content_extra_fields($type) {
  *
  * Intercepts newly published nodes and posts noticed to Twitter.
  */
-function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
+function twitter_post_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   $max_length_twitter = 100;
   switch ($op) {
     case 'insert':
@@ -183,14 +118,17 @@ function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
         module_load_include('inc', 'twitter');
 
         $twitter_account = twitter_account_load($node->twitter['account']);
-        $replacements = array('!title' => $node->title,
-                              '!url' => url('node/'. $node->nid, array('absolute' => TRUE, 'alias' => TRUE)),
-                              '!url-alias' => url('node/'. $node->nid, array('absolute' => TRUE)),
-                              '!user' => $node->name);
+        $replacements = array(
+          '!titel' => $node->title,
+          '!url' => url('node/' . $node->nid, array('absolute' => TRUE, 'alias' => TRUE)),
+          '!url-alias' => url('node/' . $node->nid, array('absolute' => TRUE)),
+          '!user' => $node->name,
+        );
+
         // Only generate the shortened URL if it's going to be used. No sense
         // burning through TinyURLs without a good reason.
         if (strstr($node->twitter['status'], '!tinyurl') !== FALSE) {
-          $replacements['!tinyurl'] = twitter_shorten_url(url('node/'. $node->nid, array('absolute' => TRUE)));
+          $replacements['!tinyurl'] = twitter_shorten_url(url('node/' . $node->nid, array('absolute' => TRUE)));
         }
 
         $status = strtr($node->twitter['status'], $replacements);
@@ -200,26 +138,16 @@ function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
           $status = token_replace($status, 'node', $node);
         }
 
-        try {
-          $result = twitter_set_status($twitter_account, $status);
-          
-          // // TODO: resolve this failure, see http://drupal.org/node/335459
-          // if (!$result) {
-          //   $result = new stdClass;
-          //   $result->error = 'Sorry, there was an unkown error connecting to Twitter!';
-          //   throw new TwitterException();
-          // }
+        if (twitter_set_status($twitter_account, $status)) {
           drupal_set_message(t('Successfully posted to Twitter'));
         }
-        catch (TwitterException $e) {
-          drupal_set_message(t('An error occurred when posting to twitter: %code %error',
-                               array('%code' => $result->code, '%error' => $result->error)), 'warning');
+        else {
+          drupal_set_message(t('Could not post to Twitter. Please check the site reports.'));
         }
       }
       break;
   }
 }
-
 
 /**
  * Generate a twitter posting form for the given user.
@@ -228,18 +156,17 @@ function twitter_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
  *   A Drupal user object.
  */
 function twitter_post_form($account = NULL) {
-  drupal_add_js(drupal_get_path('module', 'twitter_post') .'/twitter_post.js', 'module');
-
   if (empty($account)) {
     global $user;
     $account = $user;
   }
-
   if (!user_access('post to twitter', $account)) {
     return;
   }
-  $twitter_accounts = twitter_get_user_accounts($account->uid);
+
+  drupal_add_js(drupal_get_path('module', 'twitter_post') . '/twitter_post.js');
   $options = array();
+  $twitter_accounts = twitter_load_authenticated_accounts();
   foreach ($twitter_accounts as $twitter_account) {
     $options[$twitter_account->id] = $twitter_account->screen_name;
   }
@@ -260,9 +187,10 @@ function twitter_post_form($account = NULL) {
       );
     }
     else {
+      $options_keys = array_keys($options);
       $form['account'] = array(
         '#type' => 'value',
-        '#value' => array_pop(array_keys($options))
+        '#value' => array_pop($options_keys),
       );
     }
     return $form;
@@ -283,6 +211,7 @@ function twitter_include_token_fields(&$form){
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#description' => t('Prefer raw-text replacements for text to avoid problems with HTML entities!'),
+      '#access' => false,
     );
 
     $form['twitter']['token_help']['help'] = array(

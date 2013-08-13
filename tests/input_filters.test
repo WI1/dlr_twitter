@@ -23,7 +23,7 @@ class TwitterInputFilterTest extends DrupalWebTestCase {
    * Prepares the testing environment
    */
   function setUp() {
-    parent::setUp('twitter');
+    parent::setUp('libraries', 'twitter');
   }
 
   /**

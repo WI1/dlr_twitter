@@ -25,6 +25,10 @@ function twitter_views_handlers() {
         'parent' => 'views_handler_field',
         'file' => 'twitter_views_field_handlers.inc',
       ),
+      'twitter_views_handler_field_profile_url' => array(
+        'parent' => 'views_handler_field',
+        'file' => 'twitter_views_field_handlers.inc',
+      ),
     ),
   );
 }
@@ -344,6 +348,15 @@ function twitter_views_data() {
     ),
   );
 
+   // Twitter account url
+  $data['twitter_account']['profile_url'] = array(
+    'title' => t('Profile URL'),
+    'help' => t('The URL of the Twitter account.'),
+    'field' => array(
+      'handler' => 'twitter_views_handler_field_profile_url',
+    ),
+  );
+
   return $data;
 }
 
@@ -360,7 +373,3 @@ function twitter_views_data_alter(&$data) {
     'field' => 'uid',
   );
 }
-
-/**
- * @}
- */

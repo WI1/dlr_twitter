@@ -4,26 +4,17 @@ Twitter module allows listing tweets in blocks or pages. Its integration with Vi
 door to all sorts of formatting (ie. as an automatic slideshow with views_slideshow). It also
 provides useful input filters to easily link Twitter accounts and searches within text.
 
-Twitter's submodules allow posting to twitter, executing actions/rules when tweeting or login 
+Twitter's submodules allow posting to twitter, executing actions/rules when tweeting or login
 with a Twitter account.
 
-OAuth
-=====
-Except for just listing tweets, OAuth module is required to authenticate against Twitter. If you 
-just want to list tweets in a block, follow the steps at http://drupal.org/node/1253026.
+Installation
+============
+OAuth module is required for all requests to the Twitter REST API 1.1. When you download the OAuth module, get the latest stable release available at http://drupal.org/project/oauth
 
-If you download the OAuth module, get version 3.0 or higher as previous ones are not compatible
-anymore. You can find it here: http://drupal.org/project/oauth.
+Once OAuth and Twitter have been enabled, go to admin/config/services/twitter and follow instructions in order
+to provide your Twitter Application keys.
 
-Once OAuth has been enabled, go to admin/settings/twitter and follow instructions.
-
-How to create a block with Tweets
-=================================
-Read the following step by step guide: http://drupal.org/node/1253026
-
-How to add a Twitter account to a Drupal user account
-=====================================================
-Read http://drupal.org/node/1253026 for details.
+You can find further installation instructions at http://drupal.org/node/1346824
 
 How to use the username and hashtag input filters
 =================================================
@@ -38,19 +29,19 @@ After that, clear cache and try to create a page with the following body:
 The above links to a search in Twitter over the #drupal tag and a to the @drupal profile.
 These filters are avilable when configuring a tweets Views.
 
-
 How to post to Twitter
 ======================
 1. Read the OAuth section to install and configure OAuth.
-2. Once OAuth has been configured, go to admin/settings/twitter/post and select from which
+2. Once OAuth has been configured, go to admin/config/services/twitter/post and select from which
    node types a user may post to Twitter and the default message.
-3. Verify permissions at admin/user/permissions.
+3. Verify permissions at admin/people/permissions.
 4. Add a Twitter account and try to edit or post content.
+
+Further information can be found at http://drupal.org/node/1016584.
 
 How to sign in with Twitter
 ===========================
-Existing and new users can sign in with Twitter by enabling the twitter_signin module. The
-following scenarios are being contemplated so far:
+Existing and new users can sign in with Twitter by enabling the twitter_signin module. The following scenarios are being contemplated so far:
 
 * A visitor logs in with his Twitter account and, once authenticated at Twitter.com, he fills in
   his email in the Drupal registration form and receives an email to log in and set his account
@@ -59,5 +50,3 @@ following scenarios are being contemplated so far:
   in the Twitter account getting related to the user account so next time Twitter sign in will work.
 * An existing user with an already configured Twitter account can log in automatically by clicking
   on the Sign in with Twitter button.
-
-An step by step guide can be found at http://drupal.org/node/649714

@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Provide better intergration into the rules module
+ * Provides Rules integration in order to post tweets.
  */
 
 /**
@@ -14,7 +14,7 @@ function twitter_actions_rules_action_info_alter(&$actions) {
   $actions['rules_core_twitter_actions_set_status_action'] = array(
     'label' => t('Post a message to Twitter'),
     // Make sure there is something passed for $object.
-    'arguments' => array('object' => array('type' => 'value', 'default value' => NULL)),
+    'arguments' => array('object' => array('type' => 'node', 'default value' => NULL)),
     'module' => 'Twitter',
     'eval input' => array('screen_name', 'password', 'message'),
     // Let the rules system for executing core style actions execute it.
@@ -23,4 +23,3 @@ function twitter_actions_rules_action_info_alter(&$actions) {
     'configurable' => TRUE,
   );
 }
-
